@@ -1,7 +1,10 @@
 package com.malgn.domain.content.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -14,6 +17,9 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "contents")
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Content {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,8 +47,15 @@ public class Content {
     @Column(name = "last_modified_date", insertable = false)
     private LocalDateTime lastModifiedDate;
 
-    @Column(name = "last_modified_by")
     @LastModifiedBy
     @Column(name = "last_modified_by", insertable = false)
     private String lastModifiedBy;
+
+    public static Content createContent(String title, String description) {
+        return Content.builder()
+                .title(title)
+                .description(description)
+                .viewCount(0L)
+                .build();
+    }
 }
