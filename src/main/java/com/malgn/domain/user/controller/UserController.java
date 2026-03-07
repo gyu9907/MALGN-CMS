@@ -4,6 +4,7 @@ import com.malgn.domain.user.dto.RegisterUserRequest;
 import com.malgn.domain.user.dto.RegisterUserResponse;
 import com.malgn.domain.user.service.UserService;
 import com.malgn.global.dto.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<RegisterUserResponse>> registerUser(@RequestBody RegisterUserRequest registerUserRequest) {
+    public ResponseEntity<ApiResponse<RegisterUserResponse>> registerUser(@Valid @RequestBody RegisterUserRequest registerUserRequest) {
 
         RegisterUserResponse data = userService.saveUser(registerUserRequest);
 

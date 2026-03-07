@@ -5,13 +5,11 @@ import com.malgn.domain.content.dto.CreateContentResponse;
 import com.malgn.domain.content.service.ContentService;
 import com.malgn.global.dto.ApiResponse;
 import com.malgn.global.security.service.UserPrincipal;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/content")
@@ -21,7 +19,7 @@ public class ContentController {
     private final ContentService contentService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CreateContentResponse>> createContent(@RequestBody CreateContentRequest request) {
+    public ResponseEntity<ApiResponse<CreateContentResponse>> createContent(@Valid @RequestBody CreateContentRequest request) {
 
         CreateContentResponse data = contentService.createContent(request);
 

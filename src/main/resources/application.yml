@@ -29,7 +29,8 @@ spring:
   threads:
     virtual:
       enabled: on
-
+  messages:
+    encoding: UTF-8
 
 ## p6spy
 decorator:
