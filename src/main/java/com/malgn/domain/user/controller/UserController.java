@@ -19,10 +19,10 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<?>> registerUser(@RequestBody RegisterUserRequest registerUserRequest) {
+    public ResponseEntity<ApiResponse<RegisterUserResponse>> registerUser(@RequestBody RegisterUserRequest registerUserRequest) {
 
-        RegisterUserResponse userResponse = userService.saveUser(registerUserRequest);
+        RegisterUserResponse data = userService.saveUser(registerUserRequest);
 
-        return ResponseEntity.ok().body(ApiResponse.success("회원가입이 완료되었습니다.", userResponse));
+        return ResponseEntity.ok().body(ApiResponse.success("회원가입이 완료되었습니다.", data));
     }
 }

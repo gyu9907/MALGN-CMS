@@ -25,17 +25,17 @@ public class AuthController {
     private final SecurityContextRepository securityContextRepository;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<?>> login(@RequestBody LoginRequest loginRequest,
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest loginRequest,
                                                HttpServletRequest request,
                                                HttpServletResponse response) {
 
-        LoginResponse loginResponse = authService.login(loginRequest, request, response, securityContextRepository);
+        LoginResponse data = authService.login(loginRequest, request, response, securityContextRepository);
 
-        return ResponseEntity.ok().body(ApiResponse.success("로그인에 성공했습니다.", loginResponse));
+        return ResponseEntity.ok().body(ApiResponse.success("로그인에 성공했습니다.", data));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ApiResponse<?>> logout(HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<Void>> logout(HttpServletRequest request) {
 
         HttpSession session = request.getSession(false); // 세션 없으면 null 반환
 
