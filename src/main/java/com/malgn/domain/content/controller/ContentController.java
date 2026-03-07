@@ -25,4 +25,13 @@ public class ContentController {
 
         return ResponseEntity.ok().body(ApiResponse.success("콘텐츠를 추가했습니다.", data));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteContent(@PathVariable Long id,
+                                                           @AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        contentService.deleteContent(id, userPrincipal.getUsername(), userPrincipal.isAdmin());
+
+        return ResponseEntity.ok().body(ApiResponse.success("콘텐츠를 삭제했습니다.", null));
+    }
 }

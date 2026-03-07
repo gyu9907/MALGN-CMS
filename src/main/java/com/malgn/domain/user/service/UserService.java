@@ -5,6 +5,8 @@ import com.malgn.domain.user.dto.RegisterUserResponse;
 import com.malgn.domain.user.entity.User;
 import com.malgn.domain.user.entity.UserRole;
 import com.malgn.domain.user.repository.UserRepository;
+import com.malgn.global.exception.BusinessException;
+import com.malgn.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +23,7 @@ public class UserService {
     public RegisterUserResponse saveUser(RegisterUserRequest request) {
 
         if(userRepository.existsByUsername(request.getUsername())) {
-            throw new IllegalArgumentException("이미 존재하는 회원명 입니다.");
+            throw new BusinessException(ErrorCode.DUPLICATE_USERNAME);
         }
 
         User user = User.createUser(request.getUsername(), passwordEncoder.encode(request.getPassword()));

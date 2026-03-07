@@ -1,6 +1,7 @@
 package com.malgn.global.security.service;
 
 import com.malgn.domain.user.entity.User;
+import com.malgn.domain.user.entity.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -47,5 +48,10 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public boolean isAdmin() {
+        return getAuthorities().stream()
+                .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
     }
 }
