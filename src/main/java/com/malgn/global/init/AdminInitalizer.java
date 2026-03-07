@@ -1,6 +1,6 @@
-package com.malgn.init;
+package com.malgn.global.init;
 
-import com.malgn.service.UserService;
+import com.malgn.domain.user.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

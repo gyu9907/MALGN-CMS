@@ -1,4 +1,4 @@
-package com.malgn.entity;
+package com.malgn.domain.user.entity;
 
 public enum UserRole {
     ROLE_USER,

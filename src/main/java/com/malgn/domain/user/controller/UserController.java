@@ -1,4 +1,4 @@
-package com.malgn.controller;
+package com.malgn.domain.user.controller;
 
 import com.malgn.dto.RegisterUserRequest;
 import com.malgn.dto.RegisterUserResponse;

@@ -1,6 +1,5 @@
-package com.malgn.dto;
+package com.malgn.domain.user.dto;
 
-import com.malgn.entity.UserRole;
 import lombok.Getter;
 
 @Getter

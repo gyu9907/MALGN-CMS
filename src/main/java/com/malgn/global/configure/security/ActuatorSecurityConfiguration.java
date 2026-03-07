@@ -1,4 +1,4 @@
-package com.malgn.configure.security;
+package com.malgn.global.configure.security;
 
 import lombok.RequiredArgsConstructor;
 

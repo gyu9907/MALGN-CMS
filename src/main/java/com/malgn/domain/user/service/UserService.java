@@ -1,10 +1,10 @@
-package com.malgn.service;
+package com.malgn.domain.user.service;
 
-import com.malgn.dto.RegisterUserRequest;
-import com.malgn.dto.RegisterUserResponse;
-import com.malgn.entity.User;
-import com.malgn.entity.UserRole;
-import com.malgn.repository.UserRepository;
+import com.malgn.domain.user.dto.RegisterUserRequest;
+import com.malgn.domain.user.dto.RegisterUserResponse;
+import com.malgn.domain.user.entity.User;
+import com.malgn.domain.user.entity.UserRole;
+import com.malgn.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

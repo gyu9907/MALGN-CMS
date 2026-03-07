@@ -1,4 +1,4 @@
-package com.malgn.entity;
+package com.malgn.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
