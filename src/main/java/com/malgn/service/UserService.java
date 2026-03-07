@@ -3,6 +3,7 @@ package com.malgn.service;
 import com.malgn.dto.RegisterUserRequest;
 import com.malgn.dto.RegisterUserResponse;
 import com.malgn.entity.User;
+import com.malgn.entity.UserRole;
 import com.malgn.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,19 @@ public class UserService {
         userRepository.save(user);
 
         return RegisterUserResponse.from(user);
+    }
+
+    @Transactional
+    public void createAdminIfNotExists() {
+        if(userRepository.existsByUsername("admin")) {
+            return;
+        }
+
+        User user = User.createUser("admin", passwordEncoder.encode("admin"));
+
+        user.changeRole(UserRole.ROLE_ADMIN);
+
+        userRepository.save(user);
     }
 
 }

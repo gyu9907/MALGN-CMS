@@ -10,7 +10,7 @@ values
         NOW(),
         'admin',
         NOW(),
-        'admin_kkb'
+        'admin'
     ),
     (
         'Docker로 개발환경 구성하기',
@@ -26,7 +26,7 @@ values
         'Spring Data JPA 사용 시 자주 발생하는 N+1 문제의 원인과 Fetch Join을 통한 해결 방법을 설명합니다.',
         964,
         NOW(),
-        'backend_lee',
+        'backend_kyubeen',
         NOW(),
         'backend_kyubeen'
     );

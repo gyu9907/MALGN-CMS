@@ -49,4 +49,8 @@ public class User {
                 .role(UserRole.ROLE_USER)
                 .build();
     }
+
+    public void changeRole(UserRole role) {
+        this.role = role;
+    }
 }
