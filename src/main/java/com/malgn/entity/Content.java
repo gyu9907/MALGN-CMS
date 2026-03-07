@@ -2,16 +2,20 @@ package com.malgn.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "contents")
 @Getter
-public class Contents {
+public class Content {
     @Id
-    @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
     @Column(name = "title", nullable = false)
@@ -23,12 +27,14 @@ public class Contents {
     @Column(name = "view_count", nullable = false)
     private Long viewCount;
 
+    @CreatedDate
     @Column(name = "created_date", nullable = false, updatable = false)
-    private LocalDateTime createdDate =  LocalDateTime.now();
+    private LocalDateTime createdDate;
 
     @Column(name = "created_by", nullable = false, updatable = false)
     private String createdBy;
 
+    @LastModifiedDate
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate;
 
