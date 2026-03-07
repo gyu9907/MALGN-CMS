@@ -7,7 +7,6 @@ import org.springframework.security.core.Authentication;
 
 @Getter
 @Builder
-@AllArgsConstructor
 public class LoginResponse {
     private String username;
     private String role;
