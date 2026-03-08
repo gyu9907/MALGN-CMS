@@ -1,13 +1,16 @@
 package com.malgn.domain.content.controller;
 
-import com.malgn.domain.content.dto.CreateContentRequest;
-import com.malgn.domain.content.dto.CreateContentResponse;
-import com.malgn.domain.content.dto.GetContentResponse;
+import com.malgn.domain.content.dto.*;
 import com.malgn.domain.content.service.ContentService;
 import com.malgn.global.dto.ApiResponse;
+import com.malgn.global.dto.PageResponse;
 import com.malgn.global.security.service.UserPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -28,11 +31,20 @@ public class ContentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<GetContentResponse>> getContent(@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse<ContentDetailResponse>> getContent(@PathVariable("id") Long id) {
 
-        GetContentResponse data = contentService.getContentById(id);
+        ContentDetailResponse data = contentService.getContentById(id);
 
         return ResponseEntity.ok().body(ApiResponse.success("콘텐츠 상세 조회 내용입니다. 콘텐츠 ID: " + data.getId(), data));
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<PageResponse<ContentSummaryResponse>>> getContents(
+            @Valid GetContentsRequest request) {
+
+        Page<ContentSummaryResponse> data = contentService.getContents(request.toPageable());
+
+        return ResponseEntity.ok().body(ApiResponse.success("콘텐츠 목록 조회 내용입니다.", PageResponse.from(data)));
     }
 
     @DeleteMapping("/{id}")
