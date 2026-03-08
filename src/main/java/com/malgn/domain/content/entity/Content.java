@@ -58,4 +58,9 @@ public class Content {
                 .viewCount(0L)
                 .build();
     }
+
+    public void updateContent(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 }

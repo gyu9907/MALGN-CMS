@@ -8,9 +8,6 @@ import com.malgn.global.security.service.UserPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +24,7 @@ public class ContentController {
 
         ContentDetailResponse data = contentService.getContentById(id);
 
-        return ResponseEntity.ok().body(ApiResponse.success("콘텐츠 상세 조회 내용입니다. 콘텐츠 ID: " + data.getId(), data));
+        return ResponseEntity.ok().body(ApiResponse.success("콘텐츠 상세 조회 내용입니다.", data));
     }
 
     @GetMapping
@@ -45,6 +42,16 @@ public class ContentController {
         CreateContentResponse data = contentService.createContent(request);
 
         return ResponseEntity.ok().body(ApiResponse.success("콘텐츠를 추가했습니다.", data));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<ContentDetailResponse>> updateContent(@Valid @RequestBody UpdateContentRequest request,
+                                                                            @PathVariable Long id,
+                                                                            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        ContentDetailResponse data = contentService.updateContent(request, id, userPrincipal.getUsername(), userPrincipal.isAdmin());
+
+        return ResponseEntity.ok().body(ApiResponse.success("콘텐츠 수정이 완료되었습니다.", data));
     }
 
     @DeleteMapping("/{id}")
