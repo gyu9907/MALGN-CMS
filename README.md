@@ -6,7 +6,7 @@
 
 ### 1. 사전 요구사항
 *   **Java 25**
-*   **Gradle** (프로젝트에 포함된 `wrapper` 사용 권장)
+*   **Gradle** (프로젝트에 포함된 `gradlew` 사용 권장)
 
 ### 2. 프로젝트 빌드
 ```bash
@@ -22,6 +22,8 @@
 java -jar build/libs/simple-cms-api-0.0.1-SNAPSHOT.jar
 ```
 
+자세한 기능은 아래 [API 명세서](#api-명세서)를 참조
+
 ---
 
 ## 테스트 계정 정보
@@ -36,12 +38,12 @@ java -jar build/libs/simple-cms-api-0.0.1-SNAPSHOT.jar
 ## 기술 스택
 *   Java 25
 *   Spring Boot 4
-*   Spring Security (Session-based)
-*   H2 Database (In-memory)
+*   Spring Security (Session 기반)
+*   H2 Database (In-memory 방식)
 *   Spring Data JPA
 *   Spring Boot Starter Validation
 *   Lombok, Gradle
-*   Postman
+*   Postman (테스트 및 문서화)
 
 ---
 
@@ -66,39 +68,46 @@ java -jar build/libs/simple-cms-api-0.0.1-SNAPSHOT.jar
 
 ## 구현 상세 및 설계 원칙
 
-### 1. 비즈니스 무결성 및 권한 제어
-* **콘텐츠 소유권 검증**: 수정 및 삭제 요청 시 현재 세션 유저와 작성자의 일치 여부 확인 로직 구현. 관리자 외 타인 콘텐츠 접근 시 **403 Forbidden** 예외를 반환하여 데이터 보안 강화
-* **리소스 유효성 체크**: 상세 조회, 수정, 삭제 시 존재하지 않는 ID 요청에 대해 **404 Not Found** 처리로 비즈니스 로직의 안정성 확보
-* **중복 데이터 방지**: 회원가입 시 아이디 중복 여부를 사전에 검증하여 **409 Conflict** 반환 및 데이터베이스 무결성 보장
-* **데이터 이력 관리 자동화**: JPA Auditing을 적용하여 모든 엔티티의 생성/수정 시간 및 작성자 정보를 자동으로 기록, 데이터 추적성 확보
+### 1. 프로젝트 구조
+* **패키지 분리**: `domain`(비즈니스 로직)과 `global`(공통 설정)을 분리하여 구조를 단순하게 유지
+* **Entity / DTO 분리**: 엔티티를 직접 노출하지 않고 DTO를 사용하여 API 응답 구조와 도메인 모델을 분리
+* **공통 응답 구조**: `ApiResponse` 클래스를 사용하여 성공/실패 시 일관된 JSON 형태로 응답하도록 구현
+* **JPA Auditing 적용**: 엔티티의 생성자, 생성일, 수정자, 수정일을 자동으로 기록하도록 설정
 
-### 2. Spring Security 기반 인증 아키텍처
-* **세션 기반 보안 관리**: Spring Security를 연동하여 인증되지 않은 사용자의 리소스 접근을 차단하고 세션을 통한 안정적인 사용자 상태 유지
+### 2. 예외 처리 및 유효성 검사
+* **Global Exception Handling**: `BusinessException`과 `ErrorCode`를 정의하여 일관된 에러 응답을 제공
+* **요청 데이터 검증**: `@Valid`, `@NotBlank`, `@Size`, `@Min`, `@Max` 등을 활용해 요청 데이터의 유효성을 검증
+* **비즈니스 로직 검증**: 콘텐츠 소유자 검증(403), 리소스 존재 여부(404), 중복 데이터(409) 등의 예외 처리를 구현 ([API 명세서](#api-명세서) 참조)
 
-### 3. 페이징 설계
-* **사용자 친화적 페이징(1-based)**: 프론트엔드(1)와 백엔드(0) 간 인덱스 차이를 보정하여 API 호출 및 응답 시 모두 1페이지부터 시작하도록 구현
-* **서버 부하 방지**: Validation을 통해 비정상적으로 큰 페이지 번호나 과도한 페이지 크기(Size) 요청을 사전에 차단
-* **데이터 정렬**: 최신 콘텐츠 우선 노출을 위해 생성일 및 고유 ID 역순(DESC)을 기본 정렬 기준으로 적용
+### 3. 페이징 처리
+* **1-based 페이지 처리**: API 요청과 응답 모두 1페이지부터 시작하도록 구현
+* **요청 값 검증**: 비정상적으로 큰 page, size 요청을 Validation으로 제한
+* **정렬 기준**: 최신 콘텐츠가 먼저 노출되도록 `createdDate DESC`, `id DESC` 기준으로 정렬
 
-### 4. 확장성 있는 시스템 구조
-* **패키지 아키텍처 분리**: 비즈니스 로직(`domain`)과 시스템 전반의 공통 설정(`global`) 패키지를 분리하여 유지보수성 및 확장성 극대화
-* **Entity-DTO 분리**: 데이터 전달 시 엔티티 노출을 차단하고 목적에 최적화된 DTO를 사용하여 도메인 모델의 독립성 유지
-* **예외 처리 규격화**: `BusinessException`과 `ErrorCode`(Enum)를 통한 커스텀 예외 관리 및 `ApiResponse` 클래스를 활용한 일관된 응답 구조 반환
+---
+
+## 로그인 구현 방식
+
+### Spring Security 세션 기반 로그인
+* Spring Security의 기본 인증 흐름을 그대로 활용할 수 있어 구현 난이도가 낮고 안정적으로 동작하기 때문에 선택했습니다.
+* JWT 방식은 확장성과 무상태(stateless) 구조라는 장점이 있지만, 토큰 재발급, 만료 처리, 로그아웃 처리 등 추가적인 설계가 필요해 과제 범위 대비 복잡도가 높다고 판단했습니다.
+* 따라서 인증 방식 구현에 과도한 시간을 사용하기보다, 안정적인 인증 구성을 바탕으로 API 기능 구현에 집중하기 위해 세션 기반 방식을 선택했습니다.
 
 ---
 
 ## ERD
 
-<img width="801" height="269" alt="image" src="https://github.com/user-attachments/assets/6e681b53-56bd-41a7-a44c-a080378369aa" />
+<img width="737" height="282" alt="image" src="https://github.com/user-attachments/assets/d469673d-bc54-4349-9314-2d8a349171bc" />
 
-**ERD 설계 참고사항**
+
+### ERD 설계 참고사항
 * created_by, last_modified_by 컬럼은 JPA Auditing을 통해 관리되는 논리적 연관관계입니다.
 * 시스템 유연성과 성능을 위해 물리적 외래키(FK) 제약조건은 생성하지 않았으나, 어플리케이션 레이어에서 데이터 무결성을 보장하도록 설계하였습니다.
 
 ---
 
 ## API 명세서
-상세한 API 사용법은 아래 Postman 문서를 확인해 주세요.
+상세한 API 사용법 및 예외처리는 아래 Postman 문서에서 확인 가능합니다.
 
 👉 [MALGN CMS REST API 문서](https://documenter.getpostman.com/view/52990603/2sBXcLgHQT)
 
@@ -115,7 +124,10 @@ java -jar build/libs/simple-cms-api-0.0.1-SNAPSHOT.jar
 
 ---
 
-## 참고 자료
-*   Spring Security 개념 및 로그인 튜토리얼 학습 (ChatGPT 활용)
-*   [Spring Boot Validation 학습 자료](https://adjh54.tistory.com/77)
-*   테스트를 위한 콘텐츠 데이터 생성 (ChatGPT 활용)
+## 활용 도구 및 참고 자료
+
+### 활용 도구
+*   ChatGPT : Spring Security 개념 및 로그인 튜토리얼 학습, 개발 방향성 검토, 테스트 데이터 생성에 사용했습니다.
+
+### 참고 자료
+*   [Spring Boot Validation 학습 자료](https://docs.oracle.com/javaee/7/tutorial/bean-validation001.htm)
