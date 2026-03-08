@@ -1,6 +1,7 @@
 package com.malgn.domain.content.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class CreateContentRequest {
 
     @NotBlank
+    @Size(max = 100)
     private String title;
 
     @NotBlank
