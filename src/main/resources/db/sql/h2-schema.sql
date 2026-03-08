@@ -4,8 +4,7 @@ create table users
     username           varchar(50) unique      not null,
     password           varchar(255)            not null,
     role               varchar(50)             not null,
-    created_date       timestamp default now() not null,
-    last_modified_date timestamp
+    created_date       timestamp default now() not null
 );
 
 create table contents

@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -37,10 +36,6 @@ public class User {
     @CreatedDate
     @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime createdDate;
-
-    @LastModifiedDate
-    @Column(name = "last_modified_date", insertable = false)
-    private LocalDateTime lastModifiedDate;
 
     public static User createUser(String username, String password) {
         return User.builder()
