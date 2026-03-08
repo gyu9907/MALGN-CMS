@@ -2,6 +2,7 @@ package com.malgn.domain.content.controller;
 
 import com.malgn.domain.content.dto.CreateContentRequest;
 import com.malgn.domain.content.dto.CreateContentResponse;
+import com.malgn.domain.content.dto.GetContentResponse;
 import com.malgn.domain.content.service.ContentService;
 import com.malgn.global.dto.ApiResponse;
 import com.malgn.global.security.service.UserPrincipal;
@@ -24,6 +25,14 @@ public class ContentController {
         CreateContentResponse data = contentService.createContent(request);
 
         return ResponseEntity.ok().body(ApiResponse.success("콘텐츠를 추가했습니다.", data));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<GetContentResponse>> getContent(@PathVariable("id") Long id) {
+
+        GetContentResponse data = contentService.getContentById(id);
+
+        return ResponseEntity.ok().body(ApiResponse.success("콘텐츠 상세 조회 내용입니다. 콘텐츠 ID: " + data.getId(), data));
     }
 
     @DeleteMapping("/{id}")

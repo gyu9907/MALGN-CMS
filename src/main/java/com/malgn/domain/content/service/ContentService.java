@@ -2,6 +2,7 @@ package com.malgn.domain.content.service;
 
 import com.malgn.domain.content.dto.CreateContentRequest;
 import com.malgn.domain.content.dto.CreateContentResponse;
+import com.malgn.domain.content.dto.GetContentResponse;
 import com.malgn.domain.content.entity.Content;
 import com.malgn.domain.content.repository.ContentRepository;
 import com.malgn.global.exception.BusinessException;
@@ -24,6 +25,17 @@ public class ContentService {
         contentRepository.save(content);
 
         return CreateContentResponse.from(content);
+    }
+
+    @Transactional
+    public GetContentResponse getContentById(Long id) {
+
+        Content content = contentRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CONTENT_NOT_FOUND));
+
+        contentRepository.increaseViewCount(id); // 조회수 증가 (DTO에는 반영 안 됨)
+
+        return GetContentResponse.from(content);
     }
 
     @Transactional
