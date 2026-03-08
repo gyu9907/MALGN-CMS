@@ -33,6 +33,7 @@ public class UserService {
         return RegisterUserResponse.from(user);
     }
 
+    // 관리자 계정(admin)이 없는 경우 생성
     @Transactional
     public void createAdminIfNotExists() {
         if(userRepository.existsByUsername("admin")) {
@@ -46,4 +47,21 @@ public class UserService {
         userRepository.save(user);
     }
 
+    // 테스트를 위한 회원 생성
+    public void createTestUsers() {
+
+        createUserIfNotExists("dev_kim", "qwer1234");
+        createUserIfNotExists("dev_kim", "backend_kyubeen");
+
+    }
+
+    public void createUserIfNotExists(String username, String password) {
+
+        if(userRepository.existsByUsername(username)) {
+            return;
+        }
+
+        User user = User.createUser(username, passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
 }

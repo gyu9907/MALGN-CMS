@@ -1,0 +1,18 @@
+package com.malgn.global.init;
+
+import com.malgn.domain.user.dto.RegisterUserRequest;
+import com.malgn.domain.user.service.UserService;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class TestUserInitializer {
+    private final UserService userService;
+
+    @PostConstruct
+    public void init() {
+        userService.createTestUsers();
+    }
+}
