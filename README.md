@@ -87,6 +87,16 @@ java -jar build/libs/simple-cms-api-0.0.1-SNAPSHOT.jar
 
 ---
 
+## ERD
+
+<img width="801" height="269" alt="image" src="https://github.com/user-attachments/assets/6e681b53-56bd-41a7-a44c-a080378369aa" />
+
+**ERD 설계 참고사항**
+* created_by, last_modified_by 컬럼은 JPA Auditing을 통해 관리되는 논리적 연관관계이다.
+* 시스템 유연성과 성능을 위해 물리적 외래키(FK) 제약조건은 생성하지 않았으나, 어플리케이션 레이어에서 데이터 무결성을 보장하도록 설계하였다.
+
+---
+
 ## API 명세서
 상세한 API 사용법은 아래 Postman 문서를 확인해 주세요.
 
