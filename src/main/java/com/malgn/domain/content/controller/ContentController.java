@@ -22,14 +22,6 @@ public class ContentController {
 
     private final ContentService contentService;
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<CreateContentResponse>> createContent(@Valid @RequestBody CreateContentRequest request) {
-
-        CreateContentResponse data = contentService.createContent(request);
-
-        return ResponseEntity.ok().body(ApiResponse.success("콘텐츠를 추가했습니다.", data));
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ContentDetailResponse>> getContent(@PathVariable("id") Long id) {
 
@@ -45,6 +37,14 @@ public class ContentController {
         Page<ContentSummaryResponse> data = contentService.getContents(request.toPageable());
 
         return ResponseEntity.ok().body(ApiResponse.success("콘텐츠 목록 조회 내용입니다.", PageResponse.from(data)));
+    }
+
+    @PostMapping
+    public ResponseEntity<ApiResponse<CreateContentResponse>> createContent(@Valid @RequestBody CreateContentRequest request) {
+
+        CreateContentResponse data = contentService.createContent(request);
+
+        return ResponseEntity.ok().body(ApiResponse.success("콘텐츠를 추가했습니다.", data));
     }
 
     @DeleteMapping("/{id}")

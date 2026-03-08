@@ -24,7 +24,7 @@ public class GetContentsRequest {
     private int size = 10;
 
     public Pageable toPageable() {
-        return PageRequest.of(page - 1, size, 
+        return PageRequest.of(page - 1, size,
                 Sort.by(Sort.Direction.DESC, "createdDate").and(Sort.by(Sort.Direction.DESC, "id")));
     }
 }

@@ -21,16 +21,6 @@ public class ContentService {
     private final ContentRepository contentRepository;
 
     @Transactional
-    public CreateContentResponse createContent(CreateContentRequest request) {
-
-        Content content = Content.createContent(request.getTitle(), request.getDescription());
-
-        contentRepository.save(content);
-
-        return CreateContentResponse.from(content);
-    }
-
-    @Transactional
     public ContentDetailResponse getContentById(Long id) {
 
         Content content = contentRepository.findById(id)
@@ -46,6 +36,16 @@ public class ContentService {
         Page<Content> content = contentRepository.findAll(pageable);
 
         return content.map(ContentSummaryResponse::from);
+    }
+
+    @Transactional
+    public CreateContentResponse createContent(CreateContentRequest request) {
+
+        Content content = Content.createContent(request.getTitle(), request.getDescription());
+
+        contentRepository.save(content);
+
+        return CreateContentResponse.from(content);
     }
 
     @Transactional
